@@ -16,14 +16,81 @@ const pingRequestData = `{
 "rid": "F46614F4-4AA8-3F42-FEE1-11A7325E21E4"
 }`;
 
+const allGamesRequestData = `{
+"cmd": "get",
+"params":
+{
+"channel": "active",
+"label": "live games",
+"subscribe": true,
+"what":
+{
+"game":
+[
+"_id",
+"date",
+"home",
+"away",
+"status",
+"markets_count"
+],
+"match_info":
+[
+"score",
+"scores",
+"game_score",
+"server",
+"time"
+],
+"region":
+[
+"id",
+"alias",
+https://stackedit.io/app#
+2/259/1/22, 1:54 PM
+StackEdit
+"name",
+"order"
+],
+"sport":
+[
+"id",
+"alias",
+"name",
+"order"
+],
+"tournament":
+[
+"id",
+"alias",
+"name",
+"order"
+]
+},
+"where":
+{
+"game":
+{
+"active": true,
+"feed": "live"
+}
+}
+},
+"rid": "FF32862C-84F7-1276-CC06-289CA979E081"
+}`
+
 function App() {
 
   useEffect(() => {
     let socket = new WebSocket("wss://mob.blue-version.com/hub/ws-sport");
 
     socket.onopen = function(e) {
-      socket.send(requestData);
+      // socket.send(requestData);
+      setTimeout(() => socket.send(requestData), 10000)
       setInterval(() => socket.send(pingRequestData), 10000)
+      // setTimeout(() => socket.send(pingRequestData), 10000)
+      // socket.send(allGamesRequestData);
+      setTimeout(() => socket.send(allGamesRequestData), 20000)
     };
 
     socket.onmessage = function(event) {
@@ -45,7 +112,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >:
-          Tecgnamin Task
+          Technamin Task
         </a>
       </header>
     </div>

@@ -7,18 +7,14 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { useEffect, useState } from 'react';
 import socket from '../webSocket/Socket.service';
-import {IOrderType} from '../webSocket/models';
 import {Outlet} from 'react-router-dom';
-
-interface ISport {
-    regions: any
-}
+import {ISport} from "../models/sport.model";
 
 export default function Sport(){
-    const [sports, setSports] = useState<[ISport & IOrderType] | null>(null);
+    const [sports, setSports] = useState<ISport[] | null>(null);
 
     useEffect(() => {
-      socket.getAllGames(setSports);
+      socket.getAllGames<ISport[] | null>(setSports);
     }, [socket.status]);
   
 
@@ -29,7 +25,7 @@ export default function Sport(){
         defaultExpandIcon={<ChevronRightIcon />}
         sx={{width: 900}}
       >
-        {sports?.map((sport: ISport & IOrderType) => (
+        {sports?.map((sport) => (
             <TreeItem
                 key={sport.name}
                 nodeId={sport.name}

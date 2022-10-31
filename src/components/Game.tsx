@@ -5,9 +5,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {useParams, useNavigate} from 'react-router-dom';
+import {IGame} from "../models/game.model";
 
 interface props {
-    game: any
+    game: IGame;
 }
 
 export default function Game({game}:props){

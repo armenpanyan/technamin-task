@@ -27,6 +27,7 @@ export interface IGame {
     date: IGameDate;
     match_info: {
         score: string; // number:number
+        time?: string;
     };
 
     home: {

@@ -11,15 +11,18 @@ import {ResourceTypes} from "../models/resource-types.model";
 import {ISocketApi} from "./models/socket-api.model";
 
 const env: ProcessEnv = process.env;
-const ApiUrl = env.REACT_APP_WEBSOCKET_API || ""; //TODO
+const ApiUrl = env.REACT_APP_WEBSOCKET_API || "";
 
 class SocketService implements ISocketApi {
+    sid = '';
     socket: WebSocket;
-    subscribeId = '';
-    // subscribers = [];
     initSocketId = Date.now().toString(36);
     getGamesSocketId = Date.now().toString(36);
     status: 'ready' | 'connected' | 'disconnected' | 'connecting' | 'reconnecting' = 'connecting';
+    gamesEventData = {
+        rid: '',
+        data: {sid: '', data: []},
+    };
 
     getGamesCB?: Dispatch<SetStateAction<any>>;
 
@@ -33,28 +36,69 @@ class SocketService implements ISocketApi {
         try {
             const EventData: ISocketEvent<any> = JSON.parse(event.data);
 
-            if (EventData.rid === this.getGamesSocketId) {
+            if (EventData.rid === this.initSocketId){
+                this.initSocketId = '';
+                const data = requestData.allGames;
+                data.rid = this.getGamesSocketId;
+                this.socket.send(JSON.stringify(data));
+            } else if (EventData.rid === this.getGamesSocketId) {
+                this.sid = EventData.data.sid;
                 if (this.getGamesCB) {
+                    this.gamesEventData = EventData;
                     this.getGamesCB(this.group(EventData.data.data));
                 }
             }
+
+            if (this.sid === EventData.rid){
+                const event = EventData.data[0];
+                if (event._new){
+                    if (EventData.data.length){
+                            this.gamesEventData.data.data.concat(...EventData.data);
+                        if (this.getGamesCB){
+                            this.getGamesCB(this.group(this.gamesEventData.data.data))
+                        }
+                    }
+                } else if (event._remove){
+                    if (EventData.data.length){
+                        let removableGamesIds: string[] = EventData.data.map((game: IGame) => game._id);
+                        this.gamesEventData.data.data = this.gamesEventData.data.data.filter(
+                            (game: IGame)=> !removableGamesIds.includes(game._id)
+                        );
+                        if (this.getGamesCB){
+                            this.getGamesCB(this.group(this.gamesEventData.data.data))
+                        }
+                    }
+                } else {
+                    if (EventData.data.length){
+                        let updatedGamesIds: string[] = EventData.data.map((game: IGame) => game._id);
+                        let newGamesEventData: IGame[] = [];
+                        this.gamesEventData.data.data.forEach((game: IGame)=> {
+                            if (updatedGamesIds.includes(game._id)){
+                                const currentGame = EventData.data.filter((updatedGame: IGame) => updatedGame._id === game._id);
+                                game.match_info = {...game.match_info, ...currentGame.match_info}
+                            }
+                            newGamesEventData.push(game);
+                        });
+                        (this.gamesEventData.data.data as IGame[]) = newGamesEventData;//TODO
+                        if (this.getGamesCB){
+                            this.getGamesCB(this.group(this.gamesEventData.data.data))
+                        }
+                    }
+                }
+            }
         } catch (ex) {
+            console.error('Response data is not valid JSON type.', ex)
         }
     }
 
     public getAllGames<T>(cb: Dispatch<SetStateAction<T>>) {
         this.getGamesCB = cb;
-
-        setTimeout(() => {
-            const data = requestData.allGames;
-            data.rid = this.getGamesSocketId;
-            this.socket.send(JSON.stringify(data));
-        }, 2000)
     }
 
     private onOpen(): void {
         this.status = 'connected';
-        this.socket.send(JSON.stringify({...requestData.cmdInit}));
+        const initData = {...requestData.cmdInit, rid: this.initSocketId}
+        this.socket.send(JSON.stringify(initData));
         setInterval(() => this.socket.send(JSON.stringify(requestData.ping)), 10000);
     }
 

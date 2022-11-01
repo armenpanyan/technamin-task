@@ -15,7 +15,7 @@ export default function Sport(){
 
     useEffect(() => {
       socket.getAllGames<ISport[] | null>(setSports);
-    }, [socket.status]);
+    }, []);
   
 
     return (

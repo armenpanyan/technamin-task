@@ -1,6 +1,7 @@
 import TreeItem from '@mui/lab/TreeItem';
-import Game from './Game';
 import {ITournament} from "../models/tournament.model";
+
+import Game from './Game';
 
 interface props {
     tournament: ITournament;

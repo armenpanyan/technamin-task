@@ -10,9 +10,9 @@ export interface IGameDate {
 
 export interface IGameStatus {
     alias: string;
-    id: string; // "sr:sport:21:status:502"
+    id: string;
     name: string;
-    origin_id: string; // '502'
+    origin_id: string;
     short_name: string;
 }
 
@@ -26,7 +26,7 @@ export interface IGame {
     markets_count: number;
     date: IGameDate;
     match_info: {
-        score: string; // number:number
+        score: string;
         time?: string;
     };
 
@@ -34,7 +34,7 @@ export interface IGame {
         abbreviation: string;
         alias: string;
         gender: Genders;
-        id: string; // "sr:competitor:407935"
+        id: string;
         name: string;
         short_name: string;
     };
@@ -43,7 +43,7 @@ export interface IGame {
         abbreviation: string;
         alias: string;
         gender: Genders;
-        id: string; // sr:competitor:408101
+        id: string;
         manager: string;
         name: string;
         short_name: string;

@@ -1,14 +1,15 @@
-import requestData from './request-data.json';
-import {ProcessEnv} from "../models/env";
-import {IGroupBy} from './models/group-by.model';
 import {Dispatch, SetStateAction} from "react";
-import {ISocketEvent} from "./models/socket-event.model";
+
+import {ProcessEnv} from "../models/env";
 import {IGame} from "../models/game.model";
 import {ISport} from "../models/sport.model";
+import requestData from './request-data.json';
 import {IRegion} from "../models/region.model";
-import {ITournament} from "../models/tournament.model";
-import {ResourceTypes} from "../models/resource-types.model";
+import {IGroupBy} from './models/group-by.model';
 import {ISocketApi} from "./models/socket-api.model";
+import {ITournament} from "../models/tournament.model";
+import {ISocketEvent} from "./models/socket-event.model";
+import {ResourceTypes} from "../models/resource-types.model";
 
 const env: ProcessEnv = process.env;
 const ApiUrl = env.REACT_APP_WEBSOCKET_API || "";
@@ -75,11 +76,11 @@ class SocketService implements ISocketApi {
                         this.gamesEventData.data.data.forEach((game: IGame)=> {
                             if (updatedGamesIds.includes(game._id)){
                                 const currentGame = EventData.data.filter((updatedGame: IGame) => updatedGame._id === game._id);
-                                game.match_info = {...game.match_info, ...currentGame.match_info}
+                                game.match_info = {...game.match_info, ...currentGame[0].match_info}
                             }
                             newGamesEventData.push(game);
                         });
-                        (this.gamesEventData.data.data as IGame[]) = newGamesEventData;//TODO
+                        (this.gamesEventData.data.data as IGame[]) = newGamesEventData;
                         if (this.getGamesCB){
                             this.getGamesCB(this.group(this.gamesEventData.data.data))
                         }

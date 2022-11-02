@@ -1,5 +1,5 @@
 export interface IGameResource {
-    id: string; // sr:resource_name:number ::  resource_name='sport' | 'category' | 'tournament'
+    id: string;
     name: string;
     alias: string;
     order: number;

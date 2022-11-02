@@ -1,10 +1,11 @@
 import Table from '@mui/material/Table';
+import Paper from '@mui/material/Paper';
+import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import {useParams, useNavigate} from 'react-router-dom';
+
 import {IGame} from "../models/game.model";
 
 interface props {
@@ -24,7 +25,9 @@ export default function Game({game}:props){
                 component={Paper}
                 sx={{marginTop: 2, marginLeft: 1, marginBottom: 2, width: 700}}
             >
-                <Table sx={{ width: 650, }} aria-label="simple table">
+                <Table
+                    sx={{ width: 650, }} aria-label="simple table"
+                >
                     <TableBody>
                         <TableRow
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -38,7 +41,7 @@ export default function Game({game}:props){
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell component="th" scope="row">
-                            AWAY TEAM NAME
+                                AWAY TEAM NAME
                             </TableCell>
                             <TableCell align="right">{game.away.name}</TableCell>
                         </TableRow>
@@ -56,7 +59,7 @@ export default function Game({game}:props){
                             <TableCell component="th" scope="row">
                             SCORE
                             </TableCell>
-                            <TableCell align="right">{game.match_info.score}</TableCell>
+                            <TableCell align="right">{game.match_info?.score}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

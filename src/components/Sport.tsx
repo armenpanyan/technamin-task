@@ -1,14 +1,13 @@
+import {Outlet} from 'react-router-dom';
 import TreeItem from '@mui/lab/TreeItem';
-import Region from './Region';
-
 import TreeView from '@mui/lab/TreeView';
+import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import { useEffect, useState } from 'react';
-import socket from '../webSocket/Socket.service';
-import {Outlet} from 'react-router-dom';
+import Region from './Region';
 import {ISport} from "../models/sport.model";
+import socket from '../webSocket/Socket.service';
 
 export default function Sport(){
     const [sports, setSports] = useState<ISport[] | null>(null);

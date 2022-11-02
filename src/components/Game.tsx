@@ -71,5 +71,5 @@ export default function Game({game}:props){
 export function GameId(){
     const {gameId} = useParams();
 
-    return <p>Game Id - {gameId}</p>;
+    return <p style={{position: 'absolute', top: 0, right: 10}}>Game Id - {gameId}</p>;
 }

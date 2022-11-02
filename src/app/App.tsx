@@ -2,8 +2,9 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
-import { GameId } from "../components/Game";
+
 import Sport from '../components/Sport';
+import { GameId } from "../components/Game";
 
 const router = createBrowserRouter([
   {

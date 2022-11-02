@@ -13,7 +13,9 @@ export default function Tournament({tournament}: props) {
             {tournament.games.map((game, index) => (
                 <Game
                     key={index}
-                    game={game}/>)
+                    game={game}
+                />
+                )
             )}
         </TreeItem>
     )
